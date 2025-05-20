@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom"
 import { useState } from "react"
 import { users } from "../data.ts"
 import ChatUser from "./ChatUser.js"
+import SiteHeader from "./SiteHeader.tsx"
 
 const ChatList = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,10 +13,7 @@ const ChatList = () => {
     return (
         <div className="overflow-hidden flex flex-col">
             <div className="flex justify-between items-center bg-[#1E1E2F] p-4">
-                <div className="flex items-center gap-4">
-                    <img src="./icon1.1.svg" alt="icon" className="w-10 h-10 text-white" />
-                    <h1 className="text-2xl font-semibold text-white">FastChat</h1>
-                </div>
+                <SiteHeader />
                 <div className="cursor-pointer text-white hover:bg-[#2E2E4D] active:bg-[#1E1E2D] p-2 rounded-full transition group relative"
                 >
                     <BsThreeDotsVertical size={22} />
