@@ -1,6 +1,7 @@
 import { BiInfoCircle, BiSend } from "react-icons/bi";
 import { CgAttachment } from "react-icons/cg";
 import NoMessages from "./NoMessages";
+import UserActiveIcon from "./UserActiveIcon";
 
 const ChatContainer = ({ selectedChat, showChatInfo, setShowChatInfo, messageList, loginUser }) => {
 
@@ -13,7 +14,7 @@ const ChatContainer = ({ selectedChat, showChatInfo, setShowChatInfo, messageLis
                     <div>
                         <h2 className="text-2xl font-semibold">{selectedChat.name} </h2>
                         <div className="flex items-center gap-2">
-                            <span className="block w-3 h-3  bg-green-700 rounded-full"></span>
+                            <UserActiveIcon />
                             <span className="text-sm text-slate-400">Online</span>
                         </div>
                     </div>

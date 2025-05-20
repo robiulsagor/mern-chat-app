@@ -40,7 +40,7 @@ const Home = () => {
                     <NoChatSelected />
                 }
 
-                {selectedChat && showChatInfo && <ChatInfo />}
+                {selectedChat && showChatInfo && <ChatInfo selectedChat={selectedChat} />}
             </div>
         </div>
     )
