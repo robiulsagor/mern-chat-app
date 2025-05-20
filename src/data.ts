@@ -14,6 +14,22 @@ export type ChatUserProps = {
     }
 }
 
+export interface UserType {
+    id: number;
+    name: string;
+    email: string;
+    picture: string;
+}
+
+export interface MessageType {
+    id: number;
+    senderId: number;
+    receiverId: number;
+    content: string;
+    timestamp: string;
+    seen: boolean;
+}
+
 export const users: ChatUserProps['data'][] = [
     {
         id: 1000,

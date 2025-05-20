@@ -1,10 +1,16 @@
-import type { ChatUserProps } from "../data"
+import { useDispatch, useSelector } from "react-redux"
+import { getSelectedChat, selectChat } from "../redux/chatSlice"
+import type { UserType } from "../data"
 
-const ChatUser = ({ data, selectedChat, setSelectedChat }: ChatUserProps) => {
+
+
+const ChatUser = ({ data }: { data: UserType }) => {
+    const dispatch = useDispatch()
+    const selectedChat = useSelector(getSelectedChat) as UserType | null
 
     return (
-        <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat.id === data.id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
-            onClick={() => setSelectedChat(data)}>
+        <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat?.id === data.id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
+            onClick={() => dispatch(selectChat(data))}>
             <div className="flex gap-4">
                 <img src={data.picture} className="block w-11 h-11 rounded-full " />
                 <div className="flex flex-col justify-center">

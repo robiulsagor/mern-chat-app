@@ -2,17 +2,27 @@ import { BiInfoCircle, BiSend } from "react-icons/bi";
 import { CgAttachment } from "react-icons/cg";
 import NoMessages from "./NoMessages";
 import UserActiveIcon from "./UserActiveIcon";
+import { useSelector } from "react-redux";
+import { getLoggedInUser } from "../redux/userSlice";
+import { getMessages, getSelectedChat } from "../redux/chatSlice";
+import type { MessageType, UserType } from "../data";
+import type { Dispatch, SetStateAction } from "react";
 
-const ChatContainer = ({ selectedChat, showChatInfo, setShowChatInfo, messageList, loginUser }) => {
+const ChatContainer = ({ showChatInfo, setShowChatInfo }:
+    { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
+
+    const loginUser = useSelector(getLoggedInUser) as UserType | null
+    const selectedChat = useSelector(getSelectedChat) as UserType | null
+    const messageList = useSelector(getMessages) as MessageType[] | null
 
     return (
         <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden ${showChatInfo ? 'pr-0' : 'pr-3'}`}>
             {/* header part */}
             <div className="flex items-center justify-between py-3 px-3 border-b border-slate-600">
                 <div className="flex items-center gap-3">
-                    <img src={selectedChat.picture} className="block w-13 h-13 rounded-full" />
+                    <img src={selectedChat?.picture} className="block w-13 h-13 rounded-full" />
                     <div>
-                        <h2 className="text-2xl font-semibold">{selectedChat.name} </h2>
+                        <h2 className="text-2xl font-semibold">{selectedChat?.name} </h2>
                         <div className="flex items-center gap-2">
                             <UserActiveIcon />
                             <span className="text-sm text-slate-400">Online</span>
@@ -32,18 +42,18 @@ const ChatContainer = ({ selectedChat, showChatInfo, setShowChatInfo, messageLis
 
                 {
                     messageList && messageList.length > 0 ? messageList.map(msg => (
-                        <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat.id && 'flex-row-reverse ml-auto'} `}>
+                        <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?.id && 'flex-row-reverse ml-auto'} `}>
                             <img
-                                src={msg.senderId === loginUser.id ? loginUser.picture : selectedChat.picture}
+                                src={msg.senderId === loginUser?.id ? loginUser?.picture : selectedChat?.picture}
                                 className="w-10 h-10 rounded-full mb-5" alt="" />
                             <div>
                                 <p className="bg-cyan-700/50 p-3 rounded-2xl">
                                     {msg.content}
                                 </p>
-                                <span className={`text-gray-700 mt-0.5 text-sm block ${msg.senderId === loginUser.id ? 'text-right' : 'text-left'}`}> Yesterday </span>
+                                <span className={`text-gray-700 mt-0.5 text-sm block ${msg.senderId === loginUser?.id ? 'text-right' : 'text-left'}`}> Yesterday </span>
                             </div>
                         </div>
-                    )) : <NoMessages selectedUser={selectedChat.name} />
+                    )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
                 }
             </div>
 

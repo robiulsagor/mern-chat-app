@@ -5,16 +5,13 @@ import { NavLink } from "react-router-dom"
 // import { users } from "../data.ts"
 import ChatUser from "./ChatUser.js"
 import SiteHeader from "./SiteHeader.tsx"
+import { useSelector } from "react-redux"
+import { getChatList } from "../redux/chatSlice.ts"
+import type { UserType } from "../data.ts"
 
-type ChatListProps = {
-    users: any[],
-    chatList: any[],
-    selectedChat: any,
-    setSelectedChat: (user: any) => void
-}
 
-const ChatList = ({ chatList, selectedChat, setSelectedChat }: ChatListProps) => {
-
+const ChatList = () => {
+    const chatUserList = useSelector(getChatList) as UserType[] | null
 
     return (
         <div className="overflow-hidden flex flex-col bg-slate-700/10">
@@ -48,8 +45,8 @@ const ChatList = ({ chatList, selectedChat, setSelectedChat }: ChatListProps) =>
 
             <div className="h-full flex flex-col gap-0.5 px-4 mt-4 overflow-y-scroll scrollbar-hide">
                 {
-                    chatList.map((user) => (
-                        <ChatUser data={user} key={user.id} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
+                    chatUserList && chatUserList.length > 0 && chatUserList.map((user) => (
+                        <ChatUser data={user} key={user.id} />
                     ))
                 }
 
