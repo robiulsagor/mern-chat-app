@@ -1,16 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import ChatContainer from "../components/ChatContainer";
 import ChatInfo from "../components/ChatInfo";
 import NoChatSelected from "../components/NoChatSelected";
-import { users } from "../data";
+import { messages, users } from "../data";
 
 const Home = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [chatList, setChatList] = useState(users)
 
-    const [selectedChat, setSelectedChat] = useState(users[1]);
+    const loginUser = users[0]
+    const [chatList, setChatList] = useState(users.filter(user => user.id !== 1000))
+
+    const [selectedChat, setSelectedChat] = useState(false);
     const [showChatInfo, setShowChatInfo] = useState(false);
+    const [messageList, setMessageList] = useState()
+
+    useEffect(() => {
+        const msg = selectedChat && messages.filter(msg =>
+            msg.senderId === loginUser.id && msg.receiverId === selectedChat.id ||
+            msg.senderId === selectedChat.id && msg.receiverId === loginUser.id)
+
+        console.log(msg);
+
+        setMessageList(msg)
+
+    }, [selectedChat])
 
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>
@@ -22,8 +35,10 @@ const Home = () => {
 
                 {selectedChat ?
                     <ChatContainer selectedChat={selectedChat}
-                        showChatInfo={showChatInfo} setShowChatInfo={setShowChatInfo} /> :
-                    <NoChatSelected />}
+                        showChatInfo={showChatInfo} setShowChatInfo={setShowChatInfo}
+                        messageList={messageList} loginUser={loginUser} /> :
+                    <NoChatSelected />
+                }
 
                 {selectedChat && showChatInfo && <ChatInfo />}
             </div>
