@@ -1,9 +1,14 @@
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { CiSearch } from "react-icons/ci"
 import { NavLink } from "react-router-dom"
-import pic from "/pro_pic.png"
+import { useState } from "react"
+import { users } from "../data.ts"
+import ChatUser from "./ChatUser.js"
 
 const ChatList = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [chatList, setChatList] = useState(users)
+
     return (
         <div className="overflow-hidden flex flex-col">
             <div className="flex justify-between items-center bg-[#1E1E2F] p-4">
@@ -39,18 +44,8 @@ const ChatList = () => {
 
             <div className="h-full flex flex-col gap-0.5 px-4 mt-4 overflow-y-scroll scrollbar-hide">
                 {
-                    Array.from({ length: 10 }).map((_, index) => (
-                        <div key={index} className="flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer hover:bg-slate-600/20 transition">
-                            <div className="flex gap-4">
-                                <img src={pic} className="block w-11 h-11 rounded-full " />
-                                <div className="flex flex-col justify-center">
-                                    <h1 className="text-lg font-semibold text-white">John Doe</h1>
-                                    <p className="text-sm text-slate-400">Lorem ipsum dolor sit amet.</p>
-                                </div>
-                            </div>
-
-                            <span className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-700 text-sm">10</span>
-                        </div>
+                    chatList.map((user) => (
+                        <ChatUser data={user} key={user.id} />
                     ))
                 }
 
