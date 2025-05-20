@@ -1,8 +1,10 @@
 import type { ChatUserProps } from "../data"
 
-const ChatUser = ({ data }: ChatUserProps) => {
+const ChatUser = ({ data, selectedChat, setSelectedChat }: ChatUserProps) => {
+
     return (
-        <div className="flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer hover:bg-slate-600/20 transition">
+        <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat.id === data.id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
+            onClick={() => setSelectedChat(data)}>
             <div className="flex gap-4">
                 <img src={data.picture} className="block w-11 h-11 rounded-full " />
                 <div className="flex flex-col justify-center">

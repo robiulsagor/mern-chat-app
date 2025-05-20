@@ -1,17 +1,23 @@
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { CiSearch } from "react-icons/ci"
 import { NavLink } from "react-router-dom"
-import { useState } from "react"
-import { users } from "../data.ts"
+// import { useState } from "react"
+// import { users } from "../data.ts"
 import ChatUser from "./ChatUser.js"
 import SiteHeader from "./SiteHeader.tsx"
 
-const ChatList = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [chatList, setChatList] = useState(users)
+type ChatListProps = {
+    users: any[],
+    chatList: any[],
+    selectedChat: any,
+    setSelectedChat: (user: any) => void
+}
+
+const ChatList = ({ chatList, selectedChat, setSelectedChat }: ChatListProps) => {
+
 
     return (
-        <div className="overflow-hidden flex flex-col">
+        <div className="overflow-hidden flex flex-col bg-slate-700/10">
             <div className="flex justify-between items-center bg-[#1E1E2F] p-4">
                 <SiteHeader />
                 <div className="cursor-pointer text-white hover:bg-[#2E2E4D] active:bg-[#1E1E2D] p-2 rounded-full transition group relative"
@@ -43,7 +49,7 @@ const ChatList = () => {
             <div className="h-full flex flex-col gap-0.5 px-4 mt-4 overflow-y-scroll scrollbar-hide">
                 {
                     chatList.map((user) => (
-                        <ChatUser data={user} key={user.id} />
+                        <ChatUser data={user} key={user.id} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
                     ))
                 }
 
