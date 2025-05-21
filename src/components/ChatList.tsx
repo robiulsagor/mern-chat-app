@@ -5,12 +5,14 @@ import { NavLink } from "react-router-dom"
 // import { users } from "../data.ts"
 import ChatUser from "./ChatUser.js"
 import SiteHeader from "./SiteHeader.tsx"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { getChatList } from "../redux/chatSlice.ts"
 import type { UserType } from "../data.ts"
+import { removeUser } from "../redux/userSlice.ts"
 
 
 const ChatList = () => {
+    const dispatch = useDispatch()
     const chatUserList = useSelector(getChatList) as UserType[] | null
 
     return (
@@ -26,7 +28,8 @@ const ChatList = () => {
                             <NavLink to='/profile'
                                 className=" px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">
                                 Edit Profile</NavLink>
-                            <span className="block px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">Logout</span>
+                            <span onClick={() => dispatch(removeUser())}
+                                className="block px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">Logout</span>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,11 @@ import pic3 from './assets/pic-3.png'
 import pic4 from './assets/pic-4.png'
 import pic5 from './assets/pic-5.png'
 
+export const TYPES  ={
+    "SIGNUP": "SIGNUP",
+    "SIGNIN": "SIGNIN",
+}
+
 export type ChatUserProps = {
     data: {
         id: number;
@@ -29,6 +34,48 @@ export interface MessageType {
     timestamp: string;
     seen: boolean;
 }
+
+export const registerInputs = [
+    {
+        id:1,
+        type: 'text',
+        placeholder: 'Full Name',
+        val: 'name'
+    },
+    {
+        id:2,
+        type: 'email',
+        placeholder: 'Email Address',
+        val: 'email'
+    },
+    {
+        id:3,
+        type: 'password',
+        placeholder: 'Password',
+        val: 'password'
+    },
+    {
+        id:4,
+        type: 'password',
+        placeholder: 'Retype Password',
+        val: 'password2'
+    },
+]
+
+export const loginInputs = [
+    {
+        id:1,
+        type: 'email',
+        placeholder: 'Email Address',
+        val: 'email'
+    },
+    {
+        id:3,
+        type: 'password',
+        placeholder: 'Password',
+        val: 'password'
+    }
+]
 
 export const users: ChatUserProps['data'][] = [
     {
