@@ -8,7 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/userSlice";
 import { users } from "./data";
-import ForgotPassword from "./components/ForgotPassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import UpdataProfile from "./pages/UpdataProfile";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/update-profile" element={<UpdataProfile />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
