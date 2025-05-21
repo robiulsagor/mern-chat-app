@@ -8,6 +8,8 @@ import pic5 from './assets/pic-5.png'
 export const TYPES  ={
     "SIGNUP": "SIGNUP",
     "SIGNIN": "SIGNIN",
+    "FORGOT_PASSWORD": "FORGOT_PASSWORD",
+    "RESET_PASSWORD": "RESET_PASSWORD",
 }
 
 export type ChatUserProps = {
