@@ -2,7 +2,7 @@ import { motion } from "motion/react"
 import SiteHeader from "../components/SiteHeader"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import Loading from "./Loading"
+import Loading from "../components/Loading"
 
 const MODES = {
     EMAIL: "EMAIL",
