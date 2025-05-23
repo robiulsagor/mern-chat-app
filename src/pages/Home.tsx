@@ -42,6 +42,7 @@ const Home = () => {
         if (!loggedInUser?.bio || !loggedInUser?.picture) {
             navigate('/update-profile')
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

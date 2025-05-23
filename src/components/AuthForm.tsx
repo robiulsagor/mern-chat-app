@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { loginInputs, registerInputs, TYPES } from "../data"
 import React, { useEffect, useState } from "react"
 import InputField from "./InputField"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { useDispatch } from "react-redux"
 import { setUser } from "../redux/userSlice"
 import Loading from "./Loading"
@@ -18,6 +18,10 @@ export type UserDataProps = {
     email: string,
     password: string,
     password2?: string
+}
+
+interface ErrorResponse {
+    message: string;
 }
 
 const AuthForm = ({ type }: AuthFormProps) => {
@@ -71,9 +75,10 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
             toast.success("Success!");
         } catch (err) {
+            const error = err as AxiosError<ErrorResponse>;
             setLoading(false)
-            setError(`${action} failed: ${err?.response?.data?.message || "Something went wrong"}`)
-            toast.error(`${action} failed: ${err?.response?.data?.message || "Something went wrong"}`);
+            setError(`${action} failed: ${error?.response?.data?.message || "Something went wrong"}`)
+            toast.error(`${action} failed: ${error?.response?.data?.message || "Something went wrong"}`);
         }
 
     }
