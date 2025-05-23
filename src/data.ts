@@ -25,6 +25,7 @@ export interface UserType {
     id: number;
     name: string;
     email: string;
+    bio: string;
     picture: string;
 }
 

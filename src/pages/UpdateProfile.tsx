@@ -71,7 +71,7 @@ const UpdataProfile = () => {
                                     >
                                         Update
                                     </button>
-                                    <button
+                                    <button type="button"
                                         className="border border-red-700/50 bg-red-800/70 text-slate-200 py-1.5 rounded-md hover:bg-red-700/60 transition-all duration-200 cursor-pointer"
                                         onClick={() => navigate('/')}
                                     >

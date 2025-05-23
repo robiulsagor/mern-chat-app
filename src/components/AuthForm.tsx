@@ -1,11 +1,13 @@
 import { motion } from "motion/react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { loginInputs, registerInputs, TYPES } from "../data"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import InputField from "./InputField"
 import axios from "axios"
 import { useDispatch } from "react-redux"
 import { setUser } from "../redux/userSlice"
+import Loading from "./Loading"
+import { toast } from "react-toastify"
 
 type AuthFormProps = {
     type: string
@@ -20,13 +22,15 @@ export type UserDataProps = {
 
 const AuthForm = ({ type }: AuthFormProps) => {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const [userData, setUserData] = useState<UserDataProps>({
         name: '',
         email: '',
         password: '',
         password2: ''
     })
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
     const handleInputChange = (value: string, name: string) => {
         setUserData({
@@ -37,33 +41,60 @@ const AuthForm = ({ type }: AuthFormProps) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
+        let action = "";
         try {
-            if (type === TYPES.SIGNUP) {
-                console.log("Registering user", userData)
-            } else if (type === TYPES.SIGNIN) {
-                const res = await axios.post('/api/auth/login', {
-                    email: userData.email,
-                    password: userData.password
-                }, {
-                    withCredentials: true
-                })
+            setLoading(true)
+            setError(null)
+            let res;
 
-                if (res.data.success) {
-                    console.log("User logged in successfully", res.data.user)
-                    dispatch(setUser(res.data.user))
-                    navigate("/")
-                } else {
-                    console.log("Login failed", res.data.message)
-                }
+            switch (type) {
+                case TYPES.SIGNUP:
+                    action = "Registering";
+                    res = await axios.post("/api/auth/register", userData, { withCredentials: true });
+                    break;
+                case TYPES.SIGNIN:
+                    action = "Logging in";
+                    res = await axios.post('/api/auth/login', userData, {
+                        withCredentials: true
+                    })
+                    break;
+                case TYPES.FORGOT_PASSWORD:
+                    action = "Resetting password";
+                    res = await axios.post("/api/auth/reset-password", userData);
+                    break;
+            }
 
+            setLoading(false)
+            if (res?.data?.user) {
+                dispatch(setUser(res.data.user))
+            }
+
+            toast.success("Success!");
+        } catch (err) {
+            setLoading(false)
+            setError(`${action} failed: ${err?.response?.data?.message || "Something went wrong"}`)
+            toast.error(`${action} failed: ${err?.response?.data?.message || "Something went wrong"}`);
+        }
+
+    }
+
+    // Check if the button should be disabled
+    // based on the input fields
+    useEffect(() => {
+        if (type === TYPES.SIGNIN) {
+            if (!userData.email || !userData.password) {
+                setIsButtonDisabled(true)
             } else {
-                console.log("Resetting password for", userData.email)
+                setIsButtonDisabled(false)
+            }
+        } else if (type === TYPES.SIGNUP) {
+            if (!userData.name || !userData.email || !userData.password || !userData.password2) {
+                setIsButtonDisabled(true)
+            } else {
+                setIsButtonDisabled(false)
             }
         }
-        catch (error) {
-            console.log("Error Occured: ", error);
-        }
-    }
+    }, [userData, type])
 
     return (
         <motion.div
@@ -76,6 +107,15 @@ const AuthForm = ({ type }: AuthFormProps) => {
                     type === TYPES.SIGNIN ? "Sign In" :
                         "Reset Password"}
             </h2>
+
+            {/* error message */}
+            {
+                error && (
+                    <div className="bg-red-500/10 text-red-500 p-2 rounded-md mt-4">
+                        {error}
+                    </div>
+                )
+            }
 
             <form onSubmit={handleSubmit}
                 className="flex flex-col gap-4 mt-4 sm:min-w-[290px] md:min-w-[320px]">
@@ -106,10 +146,18 @@ const AuthForm = ({ type }: AuthFormProps) => {
                         )
                 }
 
-                <button className="bg-sky-700  text-slate-200 py-1.5 rounded-md
-                         hover:bg-sky-700/60 transition-all duration-200 cursor-pointer">
-                    {type === TYPES.SIGNUP ? "Register" : type === TYPES.SIGNIN ? "Login" : "Reset Password"}
-                </button>
+                {
+                    loading ? <Loading /> :
+                        <button
+                            className={`bg-sky-700 text-slate-200 py-1.5 rounded-md
+                         enabled:hover:bg-sky-700/60 transition-all duration-200 cursor-pointer
+                         disabled:opacity-50 disabled:cursor-not-allowed`}
+                            disabled={isButtonDisabled}
+                            type="submit"
+                        >
+                            {type === TYPES.SIGNUP ? "Register" : type === TYPES.SIGNIN ? "Login" : "Reset Password"}
+                        </button>
+                }
             </form>
 
             {

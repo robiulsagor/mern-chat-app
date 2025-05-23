@@ -7,9 +7,11 @@ import { messages, users, type UserType } from "../data";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
 import { getSelectedChat, setChatList, setMessages } from "../redux/chatSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const loggedInUser = useSelector(getLoggedInUser) as UserType | null
     const selectedChat = useSelector(getSelectedChat) as UserType | null
@@ -35,6 +37,12 @@ const Home = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loggedInUser])
+
+    useEffect(() => {
+        if (!loggedInUser?.bio || !loggedInUser?.picture) {
+            navigate('/update-profile')
+        }
+    }, [])
 
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>

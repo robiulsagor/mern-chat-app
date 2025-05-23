@@ -1,8 +1,6 @@
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { CiSearch } from "react-icons/ci"
 import { NavLink } from "react-router-dom"
-// import { useState } from "react"
-// import { users } from "../data.ts"
 import ChatUser from "./ChatUser.js"
 import SiteHeader from "./SiteHeader.tsx"
 import { useDispatch, useSelector } from "react-redux"
@@ -25,7 +23,7 @@ const ChatList = () => {
 
                     <div className="absolute top-full right-0 w-[150px] border border-slate-600 bg-slate-800/90 rounded-lg hidden group-hover:block p-2">
                         <div className="flex flex-col gap-0.5">
-                            <NavLink to='/profile'
+                            <NavLink to='/update-profile'
                                 className=" px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">
                                 Edit Profile</NavLink>
                             <span onClick={() => dispatch(logoutUser())}

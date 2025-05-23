@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useDispatch } from "react-redux";
 import { logoutUser, setUser } from "./redux/userSlice";
 import ForgotPassword from "./pages/ForgotPassword";
-import UpdataProfile from "./pages/UpdataProfile";
+import UpdataProfile from "./pages/UpdateProfile";
 
 import { ToastContainer } from 'react-toastify';
 import axios from "axios";
@@ -31,6 +31,9 @@ const App = () => {
         dispatch(logoutUser())
       }
     }
+
+    console.log("Checking auth...");
+
 
     checkAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
