@@ -6,7 +6,7 @@ import { TYPES } from "../data"
 const Login = () => {
     return (
         <div className='h-screen flex items-center justify-center text-white bg-black/50 scrollbar-hide '>
-            <div className=" md:w-[75%] lg:w-[50%] xl:w-[45%] rounded-xl flex flex-col md:flex-row gap-10 md:gap-6 items-center justify-between">
+            <div className=" md:w-[75%] lg:w-[60%] xl:w-[45%] rounded-xl flex flex-col md:flex-row gap-10 md:gap-6 items-center justify-between">
                 <motion.div
                     initial={{ x: 250, opacity: .4 }}
                     animate={{ x: 0, opacity: 1 }}>
