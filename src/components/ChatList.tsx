@@ -7,11 +7,25 @@ import { useDispatch, useSelector } from "react-redux"
 import { getChatList } from "../redux/chatSlice.ts"
 import type { UserType } from "../data.ts"
 import { logoutUser } from "../redux/userSlice.ts"
+import axios from "axios"
+import { toast } from "react-toastify"
 
 
 const ChatList = () => {
     const dispatch = useDispatch()
     const chatUserList = useSelector(getChatList) as UserType[] | null
+
+    const logout = async () => {
+        try {
+            dispatch(logoutUser())
+            await axios.get('/api/auth/logout')
+
+        } catch (error) {
+            console.log(error);
+
+            toast.error("Logout error")
+        }
+    }
 
     return (
         <div className="overflow-hidden flex flex-col bg-slate-700/10">
@@ -26,7 +40,7 @@ const ChatList = () => {
                             <NavLink to='/update-profile'
                                 className=" px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">
                                 Edit Profile</NavLink>
-                            <span onClick={() => dispatch(logoutUser())}
+                            <span onClick={logout}
                                 className="block px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">Logout</span>
                         </div>
                     </div>
