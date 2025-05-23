@@ -7,12 +7,12 @@ import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useDispatch } from "react-redux";
 import { logoutUser, setUser } from "./redux/userSlice";
-import { users } from "./data";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdataProfile from "./pages/UpdataProfile";
 
 import { ToastContainer } from 'react-toastify';
 import axios from "axios";
+import PublicRoute from "./components/PublicRoute";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -45,9 +45,11 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/update-profile" element={<UpdataProfile />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/register" element={<Register />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Route>
       </Routes>
       <ToastContainer />
     </div>

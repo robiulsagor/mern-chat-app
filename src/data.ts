@@ -37,6 +37,13 @@ export interface MessageType {
     seen: boolean;
 }
 
+export type RegisterInputType = {
+    id: number;
+    type: string;
+    placeholder: string;
+    val: string;
+}
+
 export const registerInputs = [
     {
         id:1,

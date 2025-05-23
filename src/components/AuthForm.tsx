@@ -1,20 +1,26 @@
 import { motion } from "motion/react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { loginInputs, registerInputs, TYPES } from "../data"
 import React, { useState } from "react"
+import InputField from "./InputField"
+import axios from "axios"
+import { useDispatch } from "react-redux"
+import { setUser } from "../redux/userSlice"
 
 type AuthFormProps = {
     type: string
 }
 
-type UserDataProps = {
+export type UserDataProps = {
     name: string,
     email: string,
     password: string,
-    password2: string
+    password2?: string
 }
 
 const AuthForm = ({ type }: AuthFormProps) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [userData, setUserData] = useState<UserDataProps>({
         name: '',
         email: '',
@@ -28,8 +34,35 @@ const AuthForm = ({ type }: AuthFormProps) => {
         })
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
 
+        try {
+            if (type === TYPES.SIGNUP) {
+                console.log("Registering user", userData)
+            } else if (type === TYPES.SIGNIN) {
+                const res = await axios.post('/api/auth/login', {
+                    email: userData.email,
+                    password: userData.password
+                }, {
+                    withCredentials: true
+                })
+
+                if (res.data.success) {
+                    console.log("User logged in successfully", res.data.user)
+                    dispatch(setUser(res.data.user))
+                    navigate("/")
+                } else {
+                    console.log("Login failed", res.data.message)
+                }
+
+            } else {
+                console.log("Resetting password for", userData.email)
+            }
+        }
+        catch (error) {
+            console.log("Error Occured: ", error);
+        }
     }
 
     return (
@@ -49,20 +82,19 @@ const AuthForm = ({ type }: AuthFormProps) => {
                 {
                     type === TYPES.SIGNUP ? (
                         registerInputs.map(data => (
-                            <input key={data.id}
-                                type={data.type} placeholder={data.placeholder}
-                                value={userData[data.val as keyof UserDataProps]}
-                                onChange={(e) => handleInputChange(e.target.value, data.val)}
-                                className="border border-slate-50/30 w-full py-1.5 px-2 rounded-md focus:outline-none focus:border-slate-200/50"
+                            <InputField key={data.id}
+                                data={data}
+                                handleInputChange={handleInputChange}
+                                userData={userData}
                             />
                         ))
                     ) :
                         type === TYPES.SIGNIN ? (
                             loginInputs.map(data => (
-                                <input key={data.id} type={data.type} placeholder={data.placeholder}
-                                    value={userData[data.val as keyof UserDataProps]}
-                                    onChange={(e) => handleInputChange(e.target.value, data.val)}
-                                    className="border border-slate-50/50 w-full py-1.5 px-2 rounded-md"
+                                <InputField key={data.id}
+                                    data={data}
+                                    handleInputChange={handleInputChange}
+                                    userData={userData}
                                 />
                             ))
                         ) : (
