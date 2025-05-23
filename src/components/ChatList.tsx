@@ -8,7 +8,7 @@ import SiteHeader from "./SiteHeader.tsx"
 import { useDispatch, useSelector } from "react-redux"
 import { getChatList } from "../redux/chatSlice.ts"
 import type { UserType } from "../data.ts"
-import { removeUser } from "../redux/userSlice.ts"
+import { logoutUser } from "../redux/userSlice.ts"
 
 
 const ChatList = () => {
@@ -28,7 +28,7 @@ const ChatList = () => {
                             <NavLink to='/profile'
                                 className=" px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">
                                 Edit Profile</NavLink>
-                            <span onClick={() => dispatch(removeUser())}
+                            <span onClick={() => dispatch(logoutUser())}
                                 className="block px-3 py-1.5 rounded-md hover:bg-slate-400/10 transition">Logout</span>
                         </div>
                     </div>

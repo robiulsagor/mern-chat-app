@@ -6,16 +6,33 @@ import Register from "./pages/Register";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useDispatch } from "react-redux";
-import { setUser } from "./redux/userSlice";
+import { logoutUser, setUser } from "./redux/userSlice";
 import { users } from "./data";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdataProfile from "./pages/UpdataProfile";
+
+import { ToastContainer } from 'react-toastify';
+import axios from "axios";
 
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(setUser(users[0]))
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get('api/auth/verify-token', {
+          withCredentials: true
+        })
+        if (res.data.success) {
+          dispatch(setUser(res.data.user))
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(logoutUser())
+      }
+    }
+
+    checkAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -32,6 +49,7 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <ToastContainer />
     </div>
   )
 }

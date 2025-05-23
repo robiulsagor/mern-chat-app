@@ -1,7 +1,7 @@
 import { motion } from "motion/react"
 import { Link } from "react-router-dom"
 import { loginInputs, registerInputs, TYPES } from "../data"
-import { useState } from "react"
+import React, { useState } from "react"
 
 type AuthFormProps = {
     type: string
@@ -28,6 +28,10 @@ const AuthForm = ({ type }: AuthFormProps) => {
         })
     }
 
+    const handleSubmit = (e: React.FormEvent) => {
+
+    }
+
     return (
         <motion.div
             initial={type === TYPES.SIGNUP ? { x: 250 } : { x: -250 }}
@@ -40,7 +44,8 @@ const AuthForm = ({ type }: AuthFormProps) => {
                         "Reset Password"}
             </h2>
 
-            <form className="flex flex-col gap-4 mt-4 sm:min-w-[290px] md:min-w-[320px]">
+            <form onSubmit={handleSubmit}
+                className="flex flex-col gap-4 mt-4 sm:min-w-[290px] md:min-w-[320px]">
                 {
                     type === TYPES.SIGNUP ? (
                         registerInputs.map(data => (
