@@ -9,6 +9,7 @@ import { setUser } from "../redux/userSlice"
 import Loading from "./Loading"
 import { toast } from "react-toastify"
 import axiosInstance from "../axiosInstance"
+import { checkRegiPass } from "../utils/helper"
 
 type AuthFormProps = {
     type: string
@@ -46,7 +47,6 @@ const AuthForm = ({ type }: AuthFormProps) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        let action = "";
         try {
             setLoading(true)
             setError(null)
@@ -54,18 +54,15 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
             switch (type) {
                 case TYPES.SIGNUP:
-                    action = "Registering";
-                    res = await axiosInstance.post("/api/auth/register", userData, { withCredentials: true });
+                    checkRegiPass(userData.password, userData.password2) //check passwords
+
+                    res = await axiosInstance.post("/auth/register", userData);
                     break;
                 case TYPES.SIGNIN:
-                    action = "Logging in";
-                    res = await axiosInstance.post('/api/auth/login', userData, {
-                        withCredentials: true
-                    })
+                    res = await axiosInstance.post('/auth/login', userData)
                     break;
                 case TYPES.FORGOT_PASSWORD:
-                    action = "Resetting password";
-                    res = await axiosInstance.post("/api/auth/reset-password", userData);
+                    res = await axiosInstance.post("/auth/reset-password", userData);
                     break;
             }
 
@@ -78,8 +75,10 @@ const AuthForm = ({ type }: AuthFormProps) => {
         } catch (err) {
             const error = err as AxiosError<ErrorResponse>;
             setLoading(false)
-            setError(`${action} failed: ${error?.response?.data?.message || "Something went wrong"}`)
-            toast.error(`${action} failed: ${error?.response?.data?.message || "Something went wrong"}`);
+            const setErrorMessage = error?.response?.data?.message ? error?.response?.data?.message : error.message ? error.message : "Something went wrong"
+
+            setError(`Error: ${setErrorMessage} `)
+            toast.error(setErrorMessage);
         }
 
     }
@@ -143,13 +142,13 @@ const AuthForm = ({ type }: AuthFormProps) => {
                                     userData={userData}
                                 />
                             ))
-                        ) : (
+                        ) : type === TYPES.RESET_PASSWORD ? (
                             <input type="email" placeholder="Email Address"
                                 value={userData.email}
                                 onChange={(e) => handleInputChange(e.target.value, 'email')}
                                 className="border border-slate-50/50 w-full py-1.5 px-2 rounded-md"
                             />
-                        )
+                        ) : ''
                 }
 
                 {
