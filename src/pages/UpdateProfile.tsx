@@ -4,38 +4,77 @@ import { useNavigate } from "react-router-dom"
 import React, { useState } from "react"
 import Loading from "../components/Loading"
 import { RxAvatar } from "react-icons/rx"
-import axios from "axios"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { getLoggedInUser, updateUserBio } from "../redux/userSlice"
 import type { UserType } from "../data"
+import axiosInstance from "../axiosInstance"
 
 
-const UpdataProfile = () => {
+const UpdateProfile = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const userData = useSelector(getLoggedInUser) as UserType | null
 
     const name = userData?.name as string
+    const [image, setImage] = useState(null as File | null)
+    const [preview, setPreview] = useState<string | null>(null);
     const [bio, setBio] = useState(userData?.bio || "")
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState("")
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return;
+
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        const maxSize = 1 * 1024 * 1024; // 1MB
+
+        if (!allowedTypes.includes(file.type)) {
+            setIsError("Please upload a valid image file (jpg, jpeg, png, webp).")
+            setImage(null)
+            return;
+        }
+
+        if (file.size > maxSize) {
+            setIsError("Image size should be less than 1MB.")
+            setImage(null)
+            return;
+        }
+
+        setIsError("")
+        setImage(file)
+        setPreview(URL.createObjectURL(file))
+    }
 
     const updateProfile = async (e: React.FormEvent) => {
         e.preventDefault()
 
+        setIsLoading(true)
+        setIsError("")
+
         try {
-            setIsLoading(true)
-            setIsError("")
-            const res = await axios.patch('api/user/update-profile', { bio })
+            const formData = new FormData();
+            formData.append('bio', bio);
+            if (image) formData.append('image', image);
+
+            const res = await axiosInstance.put('/user/update-profile', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
             if (res.data.success) {
                 setIsLoading(false)
                 setBio("")
                 toast.success("Profile updated!")
                 dispatch(updateUserBio(bio))
                 navigate("/")
+            } else {
+                setIsLoading(false)
+                setIsError(res?.data?.message || "Error updating profile")
             }
+            console.log(res.data);
+
 
         } catch (error) {
             console.log(error);
@@ -47,12 +86,19 @@ const UpdataProfile = () => {
     return (
         <div className='h-screen flex items-center justify-center text-white bg-black/50 scrollbar-hide '>
             <div className=" md:w-[75%] lg:w-[50%] xl:w-[45%] rounded-xl flex flex-col md:flex-row gap-10 md:gap-6 items-center justify-between">
-                <motion.div
-                    initial={{ x: 250, opacity: .4 }}
-                    animate={{ x: 0, opacity: 1 }}>
-                    <SiteHeader />
-                    <p className="text-center mt-2 text-slate-400">Chat with friends fast!</p>
-                </motion.div>
+
+                {/* show preview of image if any image is selected */}
+                {
+                    preview ? <div className="my-4">
+                        <img src={preview} alt="Preview" className="w-56 h-56 object-cover rounded-full" />
+                    </div> : (
+                        <motion.div
+                            initial={{ x: 250, opacity: .4 }}
+                            animate={{ x: 0, opacity: 1 }}>
+                            <SiteHeader />
+                            <p className="text-center mt-2 text-slate-400">Chat with friends fast!</p>
+                        </motion.div>)
+                }
 
                 <motion.div
                     initial={{ x: -250 }}
@@ -64,13 +110,20 @@ const UpdataProfile = () => {
                             Update Profile
                         </h2>
 
+                        {
+                            !isLoading && isError && <p className="mt-4 text-red-500 bg-red-400/10 text-sm p-2 rounded">{isError}</p>
+                        }
+
                     </div>
 
                     <form onSubmit={updateProfile} className="flex flex-col gap-4 mt-6 sm:min-w-[290px] md:min-w-[320px]">
                         <div className="flex items-center gap-2">
                             <RxAvatar size={30} className="text-slate-400  " />
-                            <label htmlFor="avatar" className="cursor-pointer hover:text-slate-400 transition">Upload profile picture</label>
-                            <input type="file" id="avatar" className="hidden" />
+                            <label htmlFor="avatar" className="cursor-pointer hover:text-slate-400 transition"> {image ? "Change" : "Upload"} profile picture</label>
+                            <input type="file" name="picture" id="avatar"
+                                onChange={handleImageChange}
+                                className="hidden"
+                                accept="image/*" />
                         </div>
 
                         <input
@@ -84,11 +137,6 @@ const UpdataProfile = () => {
                         <textarea name="bio" value={bio} onChange={e => setBio(e.target.value)}
                             placeholder="Bio"
                             className="border border-slate-50/50  py-1.5 px-2 rounded-md"></textarea>
-
-
-                        {
-                            !isLoading && isError && <p className="text-red-500 bg-red-400/10 text-sm p-2 rounded">{isError}</p>
-                        }
 
                         {
                             isLoading ? <Loading />
@@ -116,4 +164,4 @@ const UpdataProfile = () => {
     )
 }
 
-export default UpdataProfile
+export default UpdateProfile
