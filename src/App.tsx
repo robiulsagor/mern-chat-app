@@ -11,8 +11,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UpdataProfile from "./pages/UpdateProfile";
 
 import { ToastContainer } from 'react-toastify';
-import axios from "axios";
 import PublicRoute from "./components/PublicRoute";
+import axiosInstance from "./axiosInstance";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get('api/auth/verify-token', {
+        const res = await axiosInstance.get('/auth/verify-token', {
           withCredentials: true
         })
         if (res.data.success) {

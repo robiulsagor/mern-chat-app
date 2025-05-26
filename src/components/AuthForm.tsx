@@ -3,11 +3,12 @@ import { Link } from "react-router-dom"
 import { loginInputs, registerInputs, TYPES } from "../data"
 import React, { useEffect, useState } from "react"
 import InputField from "./InputField"
-import axios, { AxiosError } from "axios"
+import { AxiosError } from "axios"
 import { useDispatch } from "react-redux"
 import { setUser } from "../redux/userSlice"
 import Loading from "./Loading"
 import { toast } from "react-toastify"
+import axiosInstance from "../axiosInstance"
 
 type AuthFormProps = {
     type: string
@@ -54,17 +55,17 @@ const AuthForm = ({ type }: AuthFormProps) => {
             switch (type) {
                 case TYPES.SIGNUP:
                     action = "Registering";
-                    res = await axios.post("/api/auth/register", userData, { withCredentials: true });
+                    res = await axiosInstance.post("/api/auth/register", userData, { withCredentials: true });
                     break;
                 case TYPES.SIGNIN:
                     action = "Logging in";
-                    res = await axios.post('/api/auth/login', userData, {
+                    res = await axiosInstance.post('/api/auth/login', userData, {
                         withCredentials: true
                     })
                     break;
                 case TYPES.FORGOT_PASSWORD:
                     action = "Resetting password";
-                    res = await axios.post("/api/auth/reset-password", userData);
+                    res = await axiosInstance.post("/api/auth/reset-password", userData);
                     break;
             }
 
