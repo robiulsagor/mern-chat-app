@@ -4,6 +4,7 @@ import type { RootState } from "./store"
 
 interface User {
     bio?: string;
+    profilePicture?: string;
     // add other user properties as needed
 }
 
@@ -33,15 +34,20 @@ const userSlice = createSlice({
             state.authenticated = false
             state.loading = false
         },
-        updateUserBio: (state, action) => {
+        updateUserProfile: (state, action) => {
             if (state.currentUser) {
-                state.currentUser.bio = action.payload
+                state.currentUser.bio = action.payload.bio
+            }
+            if (action.payload.profilePicture) {
+                if (state.currentUser) {
+                    state.currentUser.profilePicture = action.payload.profilePicture
+                }
             }
         }
     }
 })
 
-export const { setUser, logoutUser, updateUserBio } = userSlice.actions
+export const { setUser, logoutUser, updateUserProfile } = userSlice.actions
 export const getLoggedInUser = (state: RootState) => state.user.currentUser
 export const getAuthenticated = (state: RootState) => state.user.authenticated
 export const getAuthLoading = (state: RootState) => state.user.loading

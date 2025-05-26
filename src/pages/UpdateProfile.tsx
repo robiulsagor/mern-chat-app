@@ -6,7 +6,7 @@ import Loading from "../components/Loading"
 import { RxAvatar } from "react-icons/rx"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
-import { getLoggedInUser, updateUserBio } from "../redux/userSlice"
+import { getLoggedInUser, updateUserProfile } from "../redux/userSlice"
 import type { UserType } from "../data"
 import axiosInstance from "../axiosInstance"
 
@@ -70,7 +70,10 @@ const UpdateProfile = () => {
                 setIsLoading(false)
                 setBio("")
                 toast.success("Profile updated!")
-                dispatch(updateUserBio(bio))
+                dispatch(updateUserProfile({
+                    bio: bio,
+                    profilePicture: res.data.user.profilePicture || ""
+                }))
                 navigate("/")
             } else {
                 setIsLoading(false)
