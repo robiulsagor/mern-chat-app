@@ -18,7 +18,7 @@ const UpdateProfile = () => {
 
     const name = userData?.name as string
     const [image, setImage] = useState(null as File | null)
-    const [preview, setPreview] = useState<string | null>(null);
+    const [preview, setPreview] = useState<string | null>(userData?.profilePicture || null);
     const [bio, setBio] = useState(userData?.bio || "")
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState("")
@@ -52,6 +52,9 @@ const UpdateProfile = () => {
 
         setIsLoading(true)
         setIsError("")
+        toast.loading("Uploading Profile Picture...", {
+            toastId: 'imgUploadToast',
+        })
 
         try {
             const formData = new FormData();
@@ -73,13 +76,13 @@ const UpdateProfile = () => {
                 setIsLoading(false)
                 setIsError(res?.data?.message || "Error updating profile")
             }
-            console.log(res.data);
-
+            toast.dismiss('imgUploadToast')
 
         } catch (error) {
             console.log(error);
             setIsLoading(false)
             setIsError("Error updating profile")
+            toast.error("Error updating profile")
         }
     }
 
@@ -136,7 +139,8 @@ const UpdateProfile = () => {
 
                         <textarea name="bio" value={bio} onChange={e => setBio(e.target.value)}
                             placeholder="Bio"
-                            className="border border-slate-50/50  py-1.5 px-2 rounded-md"></textarea>
+                            className="border border-slate-50/50  py-1.5 px-2 rounded-md"
+                            required></textarea>
 
                         {
                             isLoading ? <Loading />
