@@ -2,7 +2,18 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 
 
-const initialState = {
+interface User {
+    bio?: string;
+    // add other user properties as needed
+}
+
+interface UserState {
+    currentUser: User | null;
+    authenticated: boolean;
+    loading: boolean;
+}
+
+const initialState: UserState = {
     currentUser: null,
     authenticated: false,
     loading: true
@@ -23,7 +34,9 @@ const userSlice = createSlice({
             state.loading = false
         },
         updateUserBio: (state, action) => {
-            state.currentUser.bio = action.payload
+            if (state.currentUser) {
+                state.currentUser.bio = action.payload
+            }
         }
     }
 })
