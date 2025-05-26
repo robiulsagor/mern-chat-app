@@ -5,7 +5,7 @@ import pic3 from './assets/pic-3.png'
 import pic4 from './assets/pic-4.png'
 import pic5 from './assets/pic-5.png'
 
-export const TYPES  ={
+export const TYPES = {
     "SIGNUP": "SIGNUP",
     "SIGNIN": "SIGNIN",
     "FORGOT_PASSWORD": "FORGOT_PASSWORD",
@@ -26,7 +26,7 @@ export interface UserType {
     name: string;
     email: string;
     bio: string;
-    picture: string;
+    profilePicture: string;
 }
 
 export interface MessageType {
@@ -47,25 +47,25 @@ export type RegisterInputType = {
 
 export const registerInputs = [
     {
-        id:1,
+        id: 1,
         type: 'text',
         placeholder: 'Full Name',
         val: 'name'
     },
     {
-        id:2,
+        id: 2,
         type: 'email',
         placeholder: 'Email Address',
         val: 'email'
     },
     {
-        id:3,
+        id: 3,
         type: 'password',
         placeholder: 'Password',
         val: 'password'
     },
     {
-        id:4,
+        id: 4,
         type: 'password',
         placeholder: 'Retype Password',
         val: 'password2'
@@ -74,13 +74,13 @@ export const registerInputs = [
 
 export const loginInputs = [
     {
-        id:1,
+        id: 1,
         type: 'email',
         placeholder: 'Email Address',
         val: 'email'
     },
     {
-        id:3,
+        id: 3,
         type: 'password',
         placeholder: 'Password',
         val: 'password'
@@ -159,7 +159,7 @@ export const messages = [
         timestamp: '2023-10-01T10:01:00Z',
         seen: false,
     },
-     {
+    {
         id: 2005,
         senderId: 1000,
         receiverId: 1002,
@@ -167,7 +167,7 @@ export const messages = [
         timestamp: '2023-10-01T10:00:00Z',
         seen: true,
     },
-     {
+    {
         id: 2006,
         senderId: 1000,
         receiverId: 1002,
@@ -175,7 +175,7 @@ export const messages = [
         timestamp: '2023-10-01T10:00:00Z',
         seen: true,
     },
-     {
+    {
         id: 2007,
         senderId: 1000,
         receiverId: 1002,
@@ -251,7 +251,7 @@ export const messages = [
         timestamp: '2023-10-01T10:00:00Z',
         seen: true,
     },
-     {
+    {
         id: 2016,
         senderId: 1003,
         receiverId: 1000,
@@ -287,7 +287,7 @@ export const messages = [
         timestamp: '2023-10-01T10:00:00Z',
         seen: true,
     },
-     {
+    {
         id: 2020,
         senderId: 1004,
         receiverId: 1000,
@@ -338,7 +338,7 @@ export const messages = [
         timestamp: '2023-10-01T10:00:00Z',
         seen: true,
     },
-     {
+    {
         id: 2026,
         senderId: 1005,
         receiverId: 1000,
