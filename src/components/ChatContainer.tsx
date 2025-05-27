@@ -7,6 +7,7 @@ import { getLoggedInUser } from "../redux/userSlice";
 import { getMessages, getSelectedChat } from "../redux/chatSlice";
 import type { MessageType, UserType } from "../data";
 import type { Dispatch, SetStateAction } from "react";
+import { RxAvatar } from "react-icons/rx";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -20,7 +21,12 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
             {/* header part */}
             <div className="flex items-center justify-between py-3 px-3 border-b border-slate-600">
                 <div className="flex items-center gap-3">
-                    <img src={selectedChat?.picture} className="block w-13 h-13 rounded-full" />
+                    {
+                        selectedChat?.profilePicture ? <img src={selectedChat?.profilePicture} className="block w-11 h-11 rounded-full " /> : (
+                            <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 bg-slate-700 flex items-center justify-center" size={44} title="No profile picture" />
+                        )
+                    }
+
                     <div>
                         <h2 className="text-2xl font-semibold">{selectedChat?.name} </h2>
                         <div className="flex items-center gap-2">
@@ -42,15 +48,15 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
 
                 {
                     messageList && messageList.length > 0 ? messageList.map(msg => (
-                        <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?.id && 'flex-row-reverse ml-auto'} `}>
+                        <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?._id && 'flex-row-reverse ml-auto'} `}>
                             <img
-                                src={msg.senderId === loginUser?.id ? loginUser?.picture : selectedChat?.picture}
+                                src={msg.senderId === loginUser?._id ? loginUser?.profilePicture : selectedChat?.profilePicture}
                                 className="w-10 h-10 rounded-full mb-5" alt="" />
                             <div>
                                 <p className="bg-cyan-700/50 p-3 rounded-2xl">
                                     {msg.content}
                                 </p>
-                                <span className={`text-gray-700 mt-0.5 text-sm block ${msg.senderId === loginUser?.id ? 'text-right' : 'text-left'}`}> Yesterday </span>
+                                <span className={`text-gray-700 mt-0.5 text-sm block ${msg.senderId === loginUser?._id ? 'text-right' : 'text-left'}`}> Yesterday </span>
                             </div>
                         </div>
                     )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
