@@ -3,13 +3,17 @@ import pic1 from "../assets/pic1.png"
 import pic2 from "../assets/pic2.png"
 import pic3 from "../assets/pic3.png"
 import pic4 from "../assets/pic4.png"
+import ProfilePicture from "./ProfilePicture"
+import type { UserType } from "../data"
 
-const ChatInfo = ({ selectedChat }) => {
+const ChatInfo = ({ selectedChat }: { selectedChat: UserType }) => {
     return (
         <div className="bg-slate-700/10 flex flex-col gap-4 overflow-scroll scrollbar-hide ">
             <div className=" flex flex-col items-center justify-center py-4 px-6 ">
                 <div className="flex flex-col items-center gap-4 ">
-                    <img src={selectedChat.picture} className="block w-32 h-32 rounded-full" />
+
+                    <ProfilePicture profilePicture={selectedChat?.profilePicture} big={true} />
+
                     <div className="flex items-center gap-2">
                         <UserActiveIcon />
                         <h2 className="text-2xl"> {selectedChat.name} </h2>

@@ -15,7 +15,7 @@ const ChatUser = ({ data }: { data: UserType }) => {
             <div className="flex gap-4">
                 {
                     data.profilePicture ? <img src={data.profilePicture} className="block w-11 h-11 rounded-full " /> : (
-                        <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 bg-slate-700 flex items-center justify-center" size={44} title="No profile picture" />
+                        <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 flex items-center justify-center" size={44} title="No profile picture" />
                     )
                 }
 

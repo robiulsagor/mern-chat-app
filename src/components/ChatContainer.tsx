@@ -7,7 +7,7 @@ import { getLoggedInUser } from "../redux/userSlice";
 import { getMessages, getSelectedChat } from "../redux/chatSlice";
 import type { MessageType, UserType } from "../data";
 import type { Dispatch, SetStateAction } from "react";
-import { RxAvatar } from "react-icons/rx";
+import ProfilePicture from "./ProfilePicture";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -21,11 +21,8 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
             {/* header part */}
             <div className="flex items-center justify-between py-3 px-3 border-b border-slate-600">
                 <div className="flex items-center gap-3">
-                    {
-                        selectedChat?.profilePicture ? <img src={selectedChat?.profilePicture} className="block w-11 h-11 rounded-full " /> : (
-                            <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 bg-slate-700 flex items-center justify-center" size={44} title="No profile picture" />
-                        )
-                    }
+
+                    <ProfilePicture profilePicture={selectedChat?.profilePicture ?? ""} />
 
                     <div>
                         <h2 className="text-2xl font-semibold">{selectedChat?.name} </h2>
