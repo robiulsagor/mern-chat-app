@@ -1,15 +1,15 @@
-import { BiInfoCircle, BiSend } from "react-icons/bi";
-import { CgAttachment } from "react-icons/cg";
+import { BiInfoCircle } from "react-icons/bi";
 import NoMessages from "./NoMessages";
 import UserActiveIcon from "./UserActiveIcon";
 import { useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
 import { getLoading, getMessages, getSelectedChat } from "../redux/chatSlice";
 import type { MessageType, UserType } from "../data";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import ProfilePicture from "./ProfilePicture";
 import Loading from "./Loading";
 import Message from "./Message";
+import NewMessage from "./NewMessage";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -52,22 +52,13 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
                         <Message key={msg.id} msg={msg} loginUser={loginUser} selectedChat={selectedChat} />
                     )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
                 }
+
             </div>
 
+
             {/* msg input box */}
-            <div className={`w-full flex items-center gap-4 mb-3`}
-            >
-                <div className="flex-1 flex items-center gap-3 border border-gray-600 rounded-full px-6 bg-slate-400/10">
-                    <input type="text" name="" id="" placeholder="Type msg..." className="flex-1 py-4 outline-none" />
-                    <input type="file" name="" id="img" accept="img/*" className="hidden" />
-                    <label htmlFor="img" className="cursor-pointer hover:opacity-70 active:opacity-20 transition">
-                        <CgAttachment size={25} />
-                    </label>
-                </div>
-                <button className="bg-slate-400/20 rounded-full w-14 h-14 text-center flex items-center justify-center cursor-pointer hover:bg-slate-400/40 active:bg-slate-500/20 transition">
-                    <BiSend size={23} />
-                </button>
-            </div>
+            <NewMessage receiverId={selectedChat?._id ? String(selectedChat._id) : ""}
+                senderId={loginUser?._id ? String(loginUser._id) : ""} />
         </div >
     )
 }

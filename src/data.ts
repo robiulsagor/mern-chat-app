@@ -36,6 +36,8 @@ export interface MessageType {
     content: string;
     timestamp: string;
     seen: boolean;
+    isError?: boolean; // For optimistic UI updates
+    isSending?: boolean; // For optimistic UI updates
 }
 
 export type RegisterInputType = {
