@@ -9,6 +9,7 @@ import type { MessageType, UserType } from "../data";
 import type { Dispatch, SetStateAction } from "react";
 import ProfilePicture from "./ProfilePicture";
 import Loading from "./Loading";
+import Message from "./Message";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -45,26 +46,16 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
             {/* messages */}
             <div className="overflow-y-scroll flex-1 py-2 flex flex-col gap-4 justify-end-safe scrollbar-hide">
 
-                {isLoading ? <div className="w-full h-screen flex items-center justify-center"><Loading /></div> :
-                    messageList && messageList.length > 0 ? messageList.map(msg => (
-                        <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?._id && 'flex-row-reverse ml-auto'} `}>
-                            <img
-                                src={msg.senderId === loginUser?._id ? loginUser?.profilePicture : selectedChat?.profilePicture}
-                                className="w-10 h-10 rounded-full mb-5" alt="" />
-                            <div>
-                                <p className="bg-cyan-700/50 p-3 rounded-2xl">
-                                    {msg.content}
-                                </p>
-                                <span className={`text-gray-700 mt-0.5 text-sm block ${msg.senderId === loginUser?._id ? 'text-right' : 'text-left'}`}> Yesterday </span>
-                            </div>
-                        </div>
+                {isLoading ?
+                    <div className="w-full h-screen flex items-center justify-center"><Loading /></div> :
+                    messageList && messageList.length > 0 && loginUser && selectedChat ? messageList.map(msg => (
+                        <Message key={msg.id} msg={msg} loginUser={loginUser} selectedChat={selectedChat} />
                     )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
                 }
             </div>
 
             {/* msg input box */}
             <div className={`w-full flex items-center gap-4 mb-3`}
-
             >
                 <div className="flex-1 flex items-center gap-3 border border-gray-600 rounded-full px-6 bg-slate-400/10">
                     <input type="text" name="" id="" placeholder="Type msg..." className="flex-1 py-4 outline-none" />
