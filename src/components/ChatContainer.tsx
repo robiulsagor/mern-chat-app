@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
 import { getLoading, getMessages, getSelectedChat } from "../redux/chatSlice";
 import type { MessageType, UserType } from "../data";
-import { type Dispatch, type SetStateAction } from "react";
+import { useEffect, useRef, type Dispatch, type SetStateAction } from "react";
 import ProfilePicture from "./ProfilePicture";
 import Loading from "./Loading";
 import Message from "./Message";
@@ -18,6 +18,17 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     const selectedChat = useSelector(getSelectedChat) as UserType | null
     const messageList = useSelector(getMessages) as MessageType[] | null
     const isLoading = useSelector(getLoading)
+
+    // auto scroll to bottom when new message comes
+    const bottomRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            inline: 'nearest'
+        });
+    }, [messageList])
+
 
     return (
         <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden ${showChatInfo ? 'pr-0' : 'pr-3'}`}>
@@ -53,6 +64,7 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
                     )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
                 }
 
+                <div ref={bottomRef}></div> {/* auto scroll to bottom */}
             </div>
 
 
