@@ -4,10 +4,11 @@ import NoMessages from "./NoMessages";
 import UserActiveIcon from "./UserActiveIcon";
 import { useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
-import { getMessages, getSelectedChat } from "../redux/chatSlice";
+import { getLoading, getMessages, getSelectedChat } from "../redux/chatSlice";
 import type { MessageType, UserType } from "../data";
 import type { Dispatch, SetStateAction } from "react";
 import ProfilePicture from "./ProfilePicture";
+import Loading from "./Loading";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -15,6 +16,7 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     const loginUser = useSelector(getLoggedInUser) as UserType | null
     const selectedChat = useSelector(getSelectedChat) as UserType | null
     const messageList = useSelector(getMessages) as MessageType[] | null
+    const isLoading = useSelector(getLoading)
 
     return (
         <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden ${showChatInfo ? 'pr-0' : 'pr-3'}`}>
@@ -43,7 +45,7 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
             {/* messages */}
             <div className="overflow-y-scroll flex-1 py-2 flex flex-col gap-4 justify-end-safe scrollbar-hide">
 
-                {
+                {isLoading ? <div className="w-full h-screen flex items-center justify-center"><Loading /></div> :
                     messageList && messageList.length > 0 ? messageList.map(msg => (
                         <div key={msg.id} className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?._id && 'flex-row-reverse ml-auto'} `}>
                             <img
