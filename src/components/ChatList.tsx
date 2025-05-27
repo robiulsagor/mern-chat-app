@@ -61,7 +61,7 @@ const ChatList = () => {
             <div className="h-full flex flex-col gap-0.5 px-4 mt-4 overflow-y-scroll scrollbar-hide">
                 {
                     chatUserList && chatUserList.length > 0 && chatUserList.map((user) => (
-                        <ChatUser data={user} key={user.id} />
+                        <ChatUser data={user} key={user._id} />
                     ))
                 }
 

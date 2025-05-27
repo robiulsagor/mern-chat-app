@@ -3,11 +3,12 @@ import ChatList from "../components/ChatList";
 import ChatContainer from "../components/ChatContainer";
 import ChatInfo from "../components/ChatInfo";
 import NoChatSelected from "../components/NoChatSelected";
-import { messages, users, type UserType } from "../data";
+import { messages, type UserType } from "../data";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
 import { getSelectedChat, setChatList, setMessages } from "../redux/chatSlice";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -21,8 +22,8 @@ const Home = () => {
     // This effect is used to set the messages for the selected chat
     useEffect(() => {
         const msg = selectedChat && messages.filter(msg =>
-            msg.senderId === loggedInUser?.id && msg.receiverId === selectedChat?.id ||
-            msg.senderId === selectedChat?.id && msg.receiverId === loggedInUser?.id)
+            msg.senderId === loggedInUser?._id && msg.receiverId === selectedChat?._id ||
+            msg.senderId === selectedChat?._id && msg.receiverId === loggedInUser?._id)
         if (msg) {
             dispatch(setMessages(msg))
         }
@@ -30,19 +31,29 @@ const Home = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedChat])
 
-    // This effect is used to set the chat list when the logged in user changes
-    useEffect(() => {
-        if (loggedInUser) {
-            dispatch(setChatList(users.filter(user => user.id !== loggedInUser?.id)))
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loggedInUser])
 
     useEffect(() => {
         if (!loggedInUser?.bio) {
             navigate('/update-profile')
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        const fetchChatList = async () => {
+            if (loggedInUser) {
+                try {
+                    const res = await axiosInstance.get('/user/get-users')
+                    if (res.data.success) {
+                        const chatList = res.data.users.filter((user: UserType) => user._id !== loggedInUser._id);
+                        dispatch(setChatList(chatList));
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+        fetchChatList()
     }, [])
 
     return (

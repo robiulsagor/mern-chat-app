@@ -22,7 +22,7 @@ export type ChatUserProps = {
 }
 
 export interface UserType {
-    id: number;
+    _id: number;
     name: string;
     email: string;
     bio: string;
