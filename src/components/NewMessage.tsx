@@ -43,7 +43,7 @@ const NewMessage = ({ receiverId, senderId }: { receiverId: string, senderId: st
         >
             <div className="flex-1 flex items-center gap-3 border border-gray-600 rounded-full px-6 bg-slate-400/10">
                 <input type="text" value={msg} onChange={e => setMsg(e.target.value)}
-                    placeholder="Type msg..." className="flex-1 py-4 outline-none" />
+                    placeholder="Type msg..." className="flex-1 py-4 outline-none" autoFocus />
                 <input type="file" name="" id="img" accept="img/*" className="hidden" />
                 <label htmlFor="img" className="cursor-pointer hover:opacity-70 active:opacity-20 transition">
                     <CgAttachment size={25} />
