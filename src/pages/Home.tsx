@@ -6,7 +6,7 @@ import NoChatSelected from "../components/NoChatSelected";
 import { type UserType } from "../data";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
-import { getSelectedChat, setChatList, setLoading, setMessages } from "../redux/chatSlice";
+import { getSelectedChat, setChatList, setLoading, setMessages, setUserUnseenToZero } from "../redux/chatSlice";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import { toast } from "react-toastify";
@@ -31,6 +31,7 @@ const Home = () => {
                     const res = await axiosInstance.get(`/message/${selectedChat._id}`);
                     if (res.data.success) {
                         dispatch(setMessages(res.data.messages));
+                        dispatch(setUserUnseenToZero(selectedChat._id));
                     }
                 } catch (error) {
                     console.error(error);
@@ -56,8 +57,10 @@ const Home = () => {
             if (loggedInUser) {
                 try {
                     const res = await axiosInstance.get('/user/get-users')
+                    console.log(res.data.users);
+
                     if (res.data.success) {
-                        const chatList = res.data.users.filter((user: UserType) => user._id !== loggedInUser._id);
+                        const chatList = res.data.users
                         dispatch(setChatList(chatList));
                     }
                 } catch (error) {
@@ -67,6 +70,7 @@ const Home = () => {
         }
         fetchChatList()
     }, [])
+
 
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>

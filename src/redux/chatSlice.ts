@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
-import type { MessageType } from "../data"
+import type { ChatListType, MessageType } from "../data"
 
 
 const initialState = {
-    chatList: [],
+    chatList: [] as ChatListType[],
     selectedChat: null,
     messages: [] as MessageType[],
     loading: true
@@ -40,11 +40,19 @@ const chatSlice = createSlice({
             state.messages = state.messages.filter(msg => msg.id !== action.payload.id)
             state.messages.push(action.payload)
             state.loading = false
-        }
+        },
+        setUserUnseenToZero: (state, action) => {
+            const userId = action.payload
+            const userIndex = state.chatList.findIndex(chat => chat._id === userId)
+            if (userIndex !== -1) {
+                state.chatList[userIndex].unseenMessages = 0
+            }
+        },
     }
 })
 
-export const { setLoading, setChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages } = chatSlice.actions
+
+export const { setLoading, setChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages, setUserUnseenToZero } = chatSlice.actions
 export const getLoading = (state: RootState) => state.chat.loading
 export const getChatList = (state: RootState) => state.chat.chatList
 export const getSelectedChat = (state: RootState) => state.chat.selectedChat

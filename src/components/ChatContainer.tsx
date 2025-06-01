@@ -18,16 +18,26 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     const selectedChat = useSelector(getSelectedChat) as UserType | null
     const messageList = useSelector(getMessages) as MessageType[] | null
     const isLoading = useSelector(getLoading)
+    // const isInitialLoading = useRef(true)
+    const initialLoadRef = useRef(true);
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // auto scroll to bottom when new message comes
-    const bottomRef = useRef<HTMLDivElement>(null)
+    // auto scroll to bottom when messageList changes
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end',
-            inline: 'nearest'
-        });
-    }, [messageList])
+        if (!bottomRef.current || !containerRef.current) return;
+        if (initialLoadRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+            initialLoadRef.current = false;
+        } else {
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+
+    }, [messageList]);
+
+    useEffect(() => {
+        initialLoadRef.current = true;
+    }, [selectedChat])
 
 
     return (
@@ -55,7 +65,8 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
             {/* header part ends */}
 
             {/* messages */}
-            <div className="overflow-y-scroll flex-1 py-2 flex flex-col gap-4 justify-end-safe scrollbar-hide">
+            <div ref={containerRef}
+                className="overflow-y-scroll h-[100%] flex-1 py-2 flex flex-col gap-4 justify-end-safe scrollbar-hide">
 
                 {isLoading ?
                     <div className="w-full h-screen flex items-center justify-center"><Loading /></div> :

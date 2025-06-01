@@ -11,7 +11,7 @@ const ChatUser = ({ data }: { data: UserType }) => {
 
     return (
         <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat?._id === data._id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
-            onClick={() => dispatch(selectChat(data))}>
+            onClick={() => dispatch(selectChat({ ...data, unseenMessages: 0, test: true }))}>
             <div className="flex gap-4">
                 {
                     data.profilePicture ? <img src={data.profilePicture} className="block w-11 h-11 rounded-full " /> : (
@@ -28,7 +28,10 @@ const ChatUser = ({ data }: { data: UserType }) => {
                 </div>
             </div>
 
-            <span className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-700 text-sm">10</span>
+            {data.unseenMessages > 0 && (
+                <span className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-700 text-sm">{data?.unseenMessages} </span>
+
+            )}
         </div>
     )
 }
