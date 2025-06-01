@@ -37,7 +37,16 @@ export interface MessageType {
     timestamp: string;
     seen: boolean;
     isError?: boolean; // For optimistic UI updates
-    isSending?: boolean; // For optimistic UI updates
+    isSending?: boolean; // For optimistic UI 
+}
+
+export interface ChatListType {
+    _id: string;
+    name: string;
+    email: string;
+    bio: string;
+    profilePicture: string;
+    unseenMessages?: number
 }
 
 export type RegisterInputType = {
