@@ -5,10 +5,14 @@ import pic3 from "../assets/pic3.png"
 import pic4 from "../assets/pic4.png"
 import ProfilePicture from "./ProfilePicture"
 import type { UserType } from "../data"
+import { CgClose } from "react-icons/cg"
+import { BiUser } from "react-icons/bi"
+import type React from "react"
+import type { Dispatch } from "react"
 
-const ChatInfo = ({ selectedChat }: { selectedChat: UserType }) => {
+const ChatInfo = ({ selectedChat, setShowChatInfo }: { selectedChat: UserType, setShowChatInfo: React.SetStateAction<Dispatch<boolean>> }) => {
     return (
-        <div className="bg-slate-700/10 flex flex-col gap-4 overflow-scroll scrollbar-hide ">
+        <div className="bg-slate-800 flex flex-col gap-4 overflow-scroll scrollbar-hide absolute right-0 top-0 w-full sm:w-[90%] md:w-[60%] lg:w-full h-full lg:relative">
             <div className=" flex flex-col items-center justify-center py-4 px-6 ">
                 <div className="flex flex-col items-center gap-4 ">
 
@@ -43,8 +47,10 @@ const ChatInfo = ({ selectedChat }: { selectedChat: UserType }) => {
                     <img src={pic4} alt="" className="w-32 rounded-lg opacity-70 hover:opacity-100 transition cursor-pointer" />
                 </div>
             </div>
-
-
+            <CgClose color="white" size={28} />
+            <BiUser size={40} />
+            <span className="text-3xl fixed top-4 right-6 cursor-pointer"
+                onClick={() => setShowChatInfo(false)}>X</span>
         </div>
     )
 }

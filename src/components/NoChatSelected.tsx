@@ -1,6 +1,6 @@
 const NoChatSelected = () => {
     return (
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full hidden md:flex items-center justify-center ">
             <div className="">
                 <div className="flex flex-col items-center justify-center gap-4 mt-10">
                     <img src="./icon1.1.svg" alt="icon" className="w-20 h-20 text-white" />

@@ -41,9 +41,9 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
 
 
     return (
-        <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden ${showChatInfo ? 'pr-0' : 'pr-3'}`}>
+        <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden px-5 `}>
             {/* header part */}
-            <div className="flex items-center justify-between py-3 px-3 border-b border-slate-600">
+            <div className="flex items-center justify-between py-3  border-b border-slate-600">
                 <div className="flex items-center gap-3">
 
                     <ProfilePicture profilePicture={selectedChat?.profilePicture ?? ""} />

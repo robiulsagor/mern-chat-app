@@ -11,7 +11,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 
 
-const ChatList = () => {
+const ChatList = ({ selectedChat }: { selectedChat: boolean }) => {
     const dispatch = useDispatch()
     const chatUserList = useSelector(getChatList) as UserType[] | null
 
@@ -28,7 +28,7 @@ const ChatList = () => {
     }
 
     return (
-        <div className="overflow-hidden flex flex-col bg-slate-700/10">
+        <div className={`overflow-hidden flex-col bg-slate-700/10 ${selectedChat && 'hidden md:flex'}`}>
             <div className="flex justify-between items-center bg-[#1E1E2F] p-4">
                 <SiteHeader />
                 <div className="cursor-pointer text-white hover:bg-[#2E2E4D] active:bg-[#1E1E2D] p-2 rounded-full transition group relative"
