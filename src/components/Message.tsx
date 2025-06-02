@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import type { MessageType, UserType } from "../data"
+import ProfilePicture from "./ProfilePicture";
 
 const Message = ({ msg, loginUser, selectedChat }: { msg: MessageType, loginUser: UserType, selectedChat: UserType }) => {
     const [showTime, setShowTime] = useState(false);
@@ -14,9 +15,14 @@ const Message = ({ msg, loginUser, selectedChat }: { msg: MessageType, loginUser
     return (
         <div className={`flex justify-items-end gap-4 items-end max-w-1/2 ${msg.receiverId === selectedChat?._id && 'flex-row-reverse ml-auto'} `}
             onClick={handleShowTime}>
-            <img
-                src={msg.senderId === loginUser?._id ? loginUser?.profilePicture : selectedChat?.profilePicture}
-                className={`${msg.senderId === loginUser?._id && 'hidden'} w-10 h-10 rounded-full ${showTime ? 'mb-5' : 'mb-1'}`} alt="" />
+            {
+                msg.senderId !== loginUser?._id && (
+                    <ProfilePicture
+                        profilePicture={selectedChat?.profilePicture}
+                    />
+                )
+            }
+
             <div>
                 <p className={`bg-cyan-700/50 p-3 rounded-2xl ${msg.isError ? 'bg-cyan-300/10 opacity-65 border border-red-500' : ''}`}>
                     {msg.content}
