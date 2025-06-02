@@ -4,6 +4,7 @@ import { CgAttachment } from "react-icons/cg"
 import axiosInstance from "../axiosInstance";
 import { useDispatch } from "react-redux";
 import { replaceOptimisticFailedMessages, replaceOptimisticMessages, setOptimisticMessages } from "../redux/chatSlice";
+import { socket } from "../utils/socket";
 
 const NewMessage = ({ receiverId, senderId }: { receiverId: string, senderId: string }) => {
     const [msg, setMsg] = useState<string>("");
@@ -29,10 +30,12 @@ const NewMessage = ({ receiverId, senderId }: { receiverId: string, senderId: st
             if (res.data.success) {
                 const realMsg = res.data.newMessage
                 dispatch(replaceOptimisticMessages({ tempId, realMsg }))
+                socket.emit("sendMessage", newMsg);
+
             }
 
         } catch (error) {
-            console.log(error);
+            console.log("Error sending message:", error);
             dispatch(replaceOptimisticFailedMessages({ ...newMsg, isSending: false, isError: true }))
         }
         setMsg("");

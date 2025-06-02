@@ -32,9 +32,6 @@ const App = () => {
       }
     }
 
-    console.log("Checking auth...");
-
-
     checkAuth()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

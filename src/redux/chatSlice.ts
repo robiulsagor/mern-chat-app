@@ -48,11 +48,21 @@ const chatSlice = createSlice({
                 state.chatList[userIndex].unseenMessages = 0
             }
         },
+        addMessageToCurrentChat: (state, action) => {
+            state.messages = [...state.messages, action.payload]
+        },
+        increaseUnseenCount: (state, action) => {
+            const senderId = action.payload
+            const chatIndex = state.chatList.findIndex(chat => chat._id === senderId)
+            if (chatIndex !== -1 && state.chatList[chatIndex] !== undefined) {
+                state.chatList[chatIndex]!.unseenMessages += 1
+            }
+        }
     }
 })
 
 
-export const { setLoading, setChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages, setUserUnseenToZero } = chatSlice.actions
+export const { setLoading, setChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages, setUserUnseenToZero, addMessageToCurrentChat, increaseUnseenCount } = chatSlice.actions
 export const getLoading = (state: RootState) => state.chat.loading
 export const getChatList = (state: RootState) => state.chat.chatList
 export const getSelectedChat = (state: RootState) => state.chat.selectedChat

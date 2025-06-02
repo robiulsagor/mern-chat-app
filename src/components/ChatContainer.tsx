@@ -70,8 +70,8 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
 
                 {isLoading ?
                     <div className="w-full h-screen flex items-center justify-center"><Loading /></div> :
-                    messageList && messageList.length > 0 && loginUser && selectedChat ? messageList.map(msg => (
-                        <Message key={msg.id} msg={msg} loginUser={loginUser} selectedChat={selectedChat} />
+                    messageList && messageList.length > 0 && loginUser && selectedChat ? messageList.map((msg, index) => (
+                        <Message key={index} msg={msg} loginUser={loginUser} selectedChat={selectedChat} />
                     )) : <NoMessages selectedUser={selectedChat?.name ?? ""} />
                 }
 

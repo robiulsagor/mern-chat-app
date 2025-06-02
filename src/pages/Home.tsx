@@ -3,13 +3,16 @@ import ChatList from "../components/ChatList";
 import ChatContainer from "../components/ChatContainer";
 import ChatInfo from "../components/ChatInfo";
 import NoChatSelected from "../components/NoChatSelected";
-import { type UserType } from "../data";
+import { type MessageType, type UserType } from "../data";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoggedInUser } from "../redux/userSlice";
-import { getSelectedChat, setChatList, setLoading, setMessages, setUserUnseenToZero } from "../redux/chatSlice";
+import { addMessageToCurrentChat, getSelectedChat, increaseUnseenCount, setChatList, setLoading, setMessages, setUserUnseenToZero } from "../redux/chatSlice";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import { toast } from "react-toastify";
+import { socket } from "../utils/socket";
+// import { Socket } from "socket.io-client";
+// import socket from "../socket";
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -71,6 +74,42 @@ const Home = () => {
         fetchChatList()
     }, [])
 
+    useEffect(() => {
+        if (loggedInUser?._id) {
+            socket.emit("setup", loggedInUser?._id)
+        }
+
+        socket.on("connect", () => {
+            console.log("✅ Connected to socket server:", socket.id);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("❌ Disconnected from socket server");
+        });
+
+        return () => {
+            socket.off("connect");
+            socket.off("disconnect");
+        };
+    }, [])
+
+
+    useEffect(() => {
+        const handleNewMessage = (message: MessageType) => {
+            if (message.senderId === selectedChat?._id) {
+                dispatch(addMessageToCurrentChat(message))
+            } else {
+                dispatch(increaseUnseenCount(message.senderId))
+            }
+        }
+
+        socket.on("newMessage", handleNewMessage)
+
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+
+    }, [selectedChat?._id])
 
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>
