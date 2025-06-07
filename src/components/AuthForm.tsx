@@ -80,7 +80,6 @@ const AuthForm = ({ type }: AuthFormProps) => {
             setError(`Error: ${setErrorMessage} `)
             toast.error(setErrorMessage);
         }
-
     }
 
     // Check if the button should be disabled

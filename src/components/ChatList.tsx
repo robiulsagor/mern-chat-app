@@ -6,17 +6,23 @@ import SiteHeader from "./SiteHeader.tsx"
 import { useDispatch, useSelector } from "react-redux"
 import { getChatList } from "../redux/chatSlice.ts"
 import type { UserType } from "../data.ts"
-import { logoutUser } from "../redux/userSlice.ts"
+import { getLoggedInUser, logoutUser } from "../redux/userSlice.ts"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { removeOnlineUser } from "../redux/userStatusSlice.ts"
+import { socket } from "../socket.ts"
 
 
 const ChatList = ({ selectedChat }: { selectedChat: boolean }) => {
     const dispatch = useDispatch()
     const chatUserList = useSelector(getChatList) as UserType[] | null
+    const user = useSelector(getLoggedInUser) as UserType
 
     const logout = async () => {
         try {
+            dispatch(removeOnlineUser(user?._id))
+            socket.disconnect()
+
             dispatch(logoutUser())
             await axios.get('/api/auth/logout')
 

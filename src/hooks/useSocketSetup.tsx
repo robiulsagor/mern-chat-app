@@ -12,42 +12,68 @@ const useSocketSetup = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!user._id) return
+        if (!socket.connected) {
+            socket.connect();
+        }
 
-        socket.connect()
-        socket.emit("setup", user._id)
+        socket.on("connect", () => {
+            // Emit setup *after* confirmed connection
+            if (user?._id) {
+                socket.emit("setup", user._id);
+            }
+        });
 
-        socket.on("onlineUsers", userIds => {
-            dispatch(setOnlineUsers(userIds))
-        })
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
 
-        socket.on("userOnline", (id) => {
+    useEffect(() => {
+        if (!user?._id) return;
+
+        if (socket.connected) {
+            socket.emit("setup", user._id);
+        } else {
+            // In case socket not yet connected
+            socket.once("connect", () => {
+                socket.emit("setup", user._id);
+            });
+        }
+    }, [user?._id]);
+
+    useEffect(() => {
+        const handleOnlineUsers = (userIds) => {
+            dispatch(setOnlineUsers(userIds));
+        };
+
+        const handleUserOnline = (id) => {
             dispatch(addOnlineUser(id));
-        });
+        };
 
-        socket.on("userOffline", (id) => {
+        const handleUserOffline = (id) => {
             dispatch(removeOnlineUser(id));
-        });
+        };
 
-        socket.on("newMessage", (message) => {
+        const handleNewMessage = (message) => {
             if (message.senderId === selectedChat?._id) {
                 dispatch(addMessageToCurrentChat(message));
             } else {
                 dispatch(increaseUnseenCount(message.senderId));
             }
-
-        })
-
-        return () => {
-            socket.off("connect");
-            socket.off("disconnect");
-            socket.off("onlineUsers");
-            socket.off("userOnline");
-            socket.off("userOffline");
-            socket.off("newMessage");
         };
 
-    }, [user?._id, selectedChat?._id]);
+        socket.on("onlineUsers", handleOnlineUsers);
+        socket.on("userOnline", handleUserOnline);
+        socket.on("userOffline", handleUserOffline);
+        socket.on("newMessage", handleNewMessage);
+
+        return () => {
+            socket.off("onlineUsers", handleOnlineUsers);
+            socket.off("userOnline", handleUserOnline);
+            socket.off("userOffline", handleUserOffline);
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [selectedChat?._id]);
 }
 
 export default useSocketSetup
