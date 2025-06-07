@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import { toast } from "react-toastify";
 import { socket } from "../utils/socket";
+import useSocketSetup from "../hooks/useSocketSetup";
 // import { Socket } from "socket.io-client";
 // import socket from "../socket";
 
@@ -74,42 +75,44 @@ const Home = () => {
         fetchChatList()
     }, [])
 
-    useEffect(() => {
-        if (loggedInUser?._id) {
-            socket.emit("setup", loggedInUser?._id)
-        }
+    useSocketSetup();
 
-        socket.on("connect", () => {
-            console.log("✅ Connected to socket server:", socket.id);
-        });
+    // useEffect(() => {
+    //     if (loggedInUser?._id) {
+    //         socket.emit("setup", loggedInUser?._id)
+    //     }
 
-        socket.on("disconnect", () => {
-            console.log("❌ Disconnected from socket server");
-        });
+    //     socket.on("connect", () => {
+    //         console.log("✅ Connected to socket server:", socket.id);
+    //     });
 
-        return () => {
-            socket.off("connect");
-            socket.off("disconnect");
-        };
-    }, [])
+    //     socket.on("disconnect", () => {
+    //         console.log("❌ Disconnected from socket server");
+    //     });
+
+    //     return () => {
+    //         socket.off("connect");
+    //         socket.off("disconnect");
+    //     };
+    // }, [])
 
 
-    useEffect(() => {
-        const handleNewMessage = (message: MessageType) => {
-            if (message.senderId === selectedChat?._id) {
-                dispatch(addMessageToCurrentChat(message))
-            } else {
-                dispatch(increaseUnseenCount(message.senderId))
-            }
-        }
+    // useEffect(() => {
+    //     const handleNewMessage = (message: MessageType) => {
+    //         if (message.senderId === selectedChat?._id) {
+    //             dispatch(addMessageToCurrentChat(message))
+    //         } else {
+    //             dispatch(increaseUnseenCount(message.senderId))
+    //         }
+    //     }
 
-        socket.on("newMessage", handleNewMessage)
+    //     socket.on("newMessage", handleNewMessage)
 
-        return () => {
-            socket.off("newMessage", handleNewMessage);
-        };
+    //     return () => {
+    //         socket.off("newMessage", handleNewMessage);
+    //     };
 
-    }, [selectedChat?._id])
+    // }, [selectedChat?._id])
 
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>

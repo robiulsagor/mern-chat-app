@@ -1,11 +1,13 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import chatReducer from './chatSlice';
 import userReducer from './userSlice';
+import userStatusReducer from './userStatusSlice';
 
 export const store = configureStore({
     reducer: {
         chat: chatReducer,
-        user: userReducer
+        user: userReducer,
+        online: userStatusReducer
     }
 })
 

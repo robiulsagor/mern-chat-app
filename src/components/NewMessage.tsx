@@ -31,7 +31,6 @@ const NewMessage = ({ receiverId, senderId }: { receiverId: string, senderId: st
                 const realMsg = res.data.newMessage
                 dispatch(replaceOptimisticMessages({ tempId, realMsg }))
                 socket.emit("sendMessage", newMsg);
-
             }
 
         } catch (error) {
