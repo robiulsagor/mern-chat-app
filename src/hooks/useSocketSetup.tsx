@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getLoggedInUser } from "../redux/userSlice"
 import { addMessageToCurrentChat, getSelectedChat, increaseUnseenCount } from "../redux/chatSlice"
-import { use, useEffect } from "react"
+import { useEffect } from "react"
 import type { UserType } from "../data"
 import { socket } from "../socket"
 import { addOnlineUser, removeOnlineUser, setOnlineUsers } from "../redux/userStatusSlice"
@@ -16,14 +16,6 @@ const useSocketSetup = () => {
 
         socket.connect()
         socket.emit("setup", user._id)
-
-        // socket.on("connect", () => {
-        //     console.log("✅ Connected to socket:", socket.id);
-        // });
-
-        // socket.on("disconnect", () => {
-        //     console.log("❌ Disconnected");
-        // });
 
         socket.on("onlineUsers", userIds => {
             dispatch(setOnlineUsers(userIds))

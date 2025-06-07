@@ -10,6 +10,7 @@ import ProfilePicture from "./ProfilePicture";
 import Loading from "./Loading";
 import Message from "./Message";
 import NewMessage from "./NewMessage";
+import { useIsUserOnline } from "../hooks/useIsUserOnline";
 
 const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
@@ -18,7 +19,6 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
     const selectedChat = useSelector(getSelectedChat) as UserType | null
     const messageList = useSelector(getMessages) as MessageType[] | null
     const isLoading = useSelector(getLoading)
-    // const isInitialLoading = useRef(true)
     const initialLoadRef = useRef(true);
     const bottomRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +39,7 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
         initialLoadRef.current = true;
     }, [selectedChat])
 
+    const isOnline = useIsUserOnline({ userId: selectedChat?._id });
 
     return (
         <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden px-5 `}>
@@ -51,8 +52,10 @@ const ChatContainer = ({ showChatInfo, setShowChatInfo }:
                     <div>
                         <h2 className="text-2xl font-semibold">{selectedChat?.name} </h2>
                         <div className="flex items-center gap-2">
-                            <UserActiveIcon />
-                            <span className="text-sm text-slate-400">Online</span>
+                            <UserActiveIcon isActive={isOnline} />
+                            <span className="text-sm text-slate-400">
+                                {isOnline ? "Online" : "Offline"}
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getSelectedChat, selectChat } from "../redux/chatSlice"
 import type { UserType } from "../data"
 import { RxAvatar } from "react-icons/rx"
+import { useIsUserOnline } from "../hooks/useIsUserOnline"
 
 
 
@@ -9,15 +10,22 @@ const ChatUser = ({ data }: { data: UserType }) => {
     const dispatch = useDispatch()
     const selectedChat = useSelector(getSelectedChat) as UserType | null
 
+    const isOnline = useIsUserOnline({ userId: data._id });
+
     return (
         <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat?._id === data._id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
             onClick={() => dispatch(selectChat({ ...data, unseenMessages: 0, test: true }))}>
             <div className="flex gap-4">
-                {
-                    data.profilePicture ? <img src={data.profilePicture} className="block w-11 h-11 rounded-full " /> : (
-                        <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 flex items-center justify-center" size={44} title="No profile picture" />
-                    )
-                }
+                <div className="relative">
+                    {
+                        data.profilePicture ? <img src={data.profilePicture} className="block w-11 h-11 rounded-full " /> : (
+                            <RxAvatar className=" w-11 h-11 rounded-full text-slate-400 flex items-center justify-center" size={44} title="No profile picture" />
+                        )
+                    }
+                    <span className={`absolute right-1 bottom-1 w-3 h-3 rounded-full 
+                        ${isOnline && 'bg-green-800'}`}></span>
+                </div>
+
 
 
                 <div className="flex flex-col justify-center">
