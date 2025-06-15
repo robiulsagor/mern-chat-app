@@ -10,6 +10,7 @@ type InputFieldProps = {
 const InputField = ({ data, userData, handleInputChange }: InputFieldProps) => {
     return (
         <input key={data.id}
+            autoFocus={data.id === 1} // autofocus on the first input
             type={data.type} placeholder={data.placeholder}
             value={userData[data.val as keyof UserDataProps]}
             onChange={(e) => handleInputChange(e.target.value, data.val)}
