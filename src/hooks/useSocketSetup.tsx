@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getLoggedInUser } from "../redux/userSlice"
-import { addMessageToCurrentChat, getSelectedChat, increaseUnseenCount } from "../redux/chatSlice"
+import { addMessageToCurrentChat, addUserToChatList, getSelectedChat, increaseUnseenCount } from "../redux/chatSlice"
 import { useEffect } from "react"
 import type { UserType } from "../data"
 import { socket } from "../socket"
@@ -62,16 +62,23 @@ const useSocketSetup = () => {
             }
         };
 
+        const handleAddNewUser = (newUser) => {
+            console.log("New user online: ", newUser);
+            dispatch(addUserToChatList(newUser));
+        }
+
         socket.on("onlineUsers", handleOnlineUsers);
         socket.on("userOnline", handleUserOnline);
         socket.on("userOffline", handleUserOffline);
         socket.on("newMessage", handleNewMessage);
+        socket.on("newUser", handleAddNewUser)
 
         return () => {
             socket.off("onlineUsers", handleOnlineUsers);
             socket.off("userOnline", handleUserOnline);
             socket.off("userOffline", handleUserOffline);
             socket.off("newMessage", handleNewMessage);
+            socket.off("newUser", handleAddNewUser)
         };
     }, [selectedChat?._id]);
 }

@@ -5,8 +5,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useDispatch } from "react-redux";
-import { logoutUser, setUser } from "./redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoggedInUser, logoutUser, setUser } from "./redux/userSlice";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdataProfile from "./pages/UpdateProfile";
 
@@ -16,9 +16,12 @@ import axiosInstance from "./axiosInstance";
 
 const App = () => {
   const dispatch = useDispatch()
+  const user = useSelector(getLoggedInUser)
 
   useEffect(() => {
     const checkAuth = async () => {
+      console.log("User: ", user);
+
       try {
         const res = await axiosInstance.get('/auth/verify-token', {
           withCredentials: true

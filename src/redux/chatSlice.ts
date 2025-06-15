@@ -20,6 +20,12 @@ const chatSlice = createSlice({
         setChatList: (state, action) => {
             state.chatList = action.payload
         },
+        addUserToChatList: (state, action) => {
+            const exists = state.chatList.some(user => user._id === action.payload._id);
+            if (!exists) {
+                state.chatList.push(action.payload);
+            }
+        },
         selectChat: (state, action) => {
             state.selectedChat = action.payload
         },
@@ -62,7 +68,7 @@ const chatSlice = createSlice({
 })
 
 
-export const { setLoading, setChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages, setUserUnseenToZero, addMessageToCurrentChat, increaseUnseenCount } = chatSlice.actions
+export const { setLoading, setChatList, addUserToChatList, selectChat, setMessages, setOptimisticMessages, replaceOptimisticMessages, replaceOptimisticFailedMessages, setUserUnseenToZero, addMessageToCurrentChat, increaseUnseenCount } = chatSlice.actions
 export const getLoading = (state: RootState) => state.chat.loading
 export const getChatList = (state: RootState) => state.chat.chatList
 export const getSelectedChat = (state: RootState) => state.chat.selectedChat

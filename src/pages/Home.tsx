@@ -74,6 +74,16 @@ const Home = () => {
 
     useSocketSetup();
 
+
+    useEffect(() => {
+        const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+
+        if (justLoggedIn === "true") {
+            sessionStorage.removeItem("justLoggedIn"); // so it doesn't repeat
+            window.location.reload(); // force one-time refresh
+        }
+    }, []);
+
     return (
         <div className='w-full h-screen flex items-center justify-center bg-black/60'>
 

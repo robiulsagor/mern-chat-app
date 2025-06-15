@@ -66,13 +66,19 @@ const AuthForm = ({ type }: AuthFormProps) => {
                     break;
             }
 
+            console.log(res);
+
+
             setLoading(false)
             if (res?.data?.user) {
+                sessionStorage.setItem("justLoggedIn", "true")
                 dispatch(setUser(res.data.user))
             }
 
             toast.success("Success!");
         } catch (err) {
+            console.log(err);
+
             const error = err as AxiosError<ErrorResponse>;
             setLoading(false)
             const setErrorMessage = error?.response?.data?.message ? error?.response?.data?.message : error.message ? error.message : "Something went wrong"

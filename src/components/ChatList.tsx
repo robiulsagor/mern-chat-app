@@ -15,7 +15,7 @@ import { socket } from "../socket.ts"
 
 const ChatList = ({ selectedChat }: { selectedChat: boolean }) => {
     const dispatch = useDispatch()
-    const chatUserList = useSelector(getChatList) as UserType[] | null
+    const chatUserList = useSelector(getChatList) as UserType[]
     const user = useSelector(getLoggedInUser) as UserType
 
     const logout = async () => {
