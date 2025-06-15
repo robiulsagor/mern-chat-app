@@ -2,13 +2,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { getLoggedInUser } from "../redux/userSlice"
 import { addMessageToCurrentChat, addUserToChatList, getSelectedChat, increaseUnseenCount } from "../redux/chatSlice"
 import { useEffect } from "react"
-import type { UserType } from "../data"
+import type { MessageType, UserType } from "../data"
 import { socket } from "../socket"
 import { addOnlineUser, removeOnlineUser, setOnlineUsers } from "../redux/userStatusSlice"
 
 const useSocketSetup = () => {
     const user = useSelector(getLoggedInUser) as UserType
-    const selectedChat = useSelector(getSelectedChat)
+    const selectedChat = useSelector(getSelectedChat) as UserType | null
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -26,6 +26,7 @@ const useSocketSetup = () => {
         return () => {
             socket.disconnect();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -42,19 +43,19 @@ const useSocketSetup = () => {
     }, [user?._id]);
 
     useEffect(() => {
-        const handleOnlineUsers = (userIds) => {
+        const handleOnlineUsers = (userIds: string[]) => {
             dispatch(setOnlineUsers(userIds));
         };
 
-        const handleUserOnline = (id) => {
+        const handleUserOnline = (id: string) => {
             dispatch(addOnlineUser(id));
         };
 
-        const handleUserOffline = (id) => {
+        const handleUserOffline = (id: string) => {
             dispatch(removeOnlineUser(id));
         };
 
-        const handleNewMessage = (message) => {
+        const handleNewMessage = (message: MessageType) => {
             if (message.senderId === selectedChat?._id) {
                 dispatch(addMessageToCurrentChat(message));
             } else {
@@ -62,7 +63,7 @@ const useSocketSetup = () => {
             }
         };
 
-        const handleAddNewUser = (newUser) => {
+        const handleAddNewUser = (newUser: UserType) => {
             console.log("New user online: ", newUser);
             dispatch(addUserToChatList(newUser));
         }
@@ -80,6 +81,7 @@ const useSocketSetup = () => {
             socket.off("newMessage", handleNewMessage);
             socket.off("newUser", handleAddNewUser)
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedChat?._id]);
 }
 

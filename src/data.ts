@@ -22,7 +22,7 @@ export type ChatUserProps = {
 }
 
 export interface UserType {
-    _id: number;
+    _id: string | number;
     name: string;
     email: string;
     bio: string;
@@ -46,7 +46,7 @@ export interface ChatListType {
     email: string;
     bio: string;
     profilePicture: string;
-    unseenMessages?: number
+    unseenMessages: number
 }
 
 export type RegisterInputType = {
