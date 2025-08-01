@@ -9,8 +9,12 @@ import { CgClose } from "react-icons/cg"
 import { BiUser } from "react-icons/bi"
 import type React from "react"
 import type { Dispatch } from "react"
+import { useIsUserOnline } from "../hooks/useIsUserOnline"
 
-const ChatInfo = ({ selectedChat, setShowChatInfo }: { selectedChat: UserType, setShowChatInfo: React.SetStateAction<Dispatch<boolean>> }) => {
+const ChatInfo = ({ selectedChat, setShowChatInfo }:
+    { selectedChat: UserType, setShowChatInfo: Dispatch<React.SetStateAction<boolean>> }) => {
+    const isOnline = useIsUserOnline({ userId: selectedChat?._id });
+
     return (
         <div className="bg-slate-800 flex flex-col gap-4 overflow-scroll scrollbar-hide absolute right-0 top-0 w-full sm:w-[90%] md:w-[60%] lg:w-full h-full lg:relative">
             <div className=" flex flex-col items-center justify-center py-4 px-6 ">
@@ -19,7 +23,7 @@ const ChatInfo = ({ selectedChat, setShowChatInfo }: { selectedChat: UserType, s
                     <ProfilePicture profilePicture={selectedChat?.profilePicture} big={true} />
 
                     <div className="flex items-center gap-2">
-                        <UserActiveIcon />
+                        <UserActiveIcon isActive={isOnline} />
                         <h2 className="text-2xl"> {selectedChat.name} </h2>
                     </div>
 
