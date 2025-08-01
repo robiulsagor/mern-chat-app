@@ -13,7 +13,7 @@ import { useIsUserOnline } from "../hooks/useIsUserOnline"
 
 const ChatInfo = ({ selectedChat, setShowChatInfo }:
     { selectedChat: UserType, setShowChatInfo: Dispatch<React.SetStateAction<boolean>> }) => {
-    const isOnline = useIsUserOnline({ userId: selectedChat?._id });
+    const isOnline = useIsUserOnline({ userId: selectedChat?._id ? String(selectedChat._id) : "" });
 
     return (
         <div className="bg-slate-800 flex flex-col gap-4 overflow-scroll scrollbar-hide absolute right-0 top-0 w-full sm:w-[90%] md:w-[60%] lg:w-full h-full lg:relative">

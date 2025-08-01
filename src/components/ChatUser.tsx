@@ -10,7 +10,7 @@ const ChatUser = ({ data }: { data: UserType }) => {
     const dispatch = useDispatch()
     const selectedChat = useSelector(getSelectedChat) as UserType | null
 
-    const isOnline = useIsUserOnline({ userId: data._id });
+    const isOnline = useIsUserOnline({ userId: selectedChat?._id ? String(selectedChat._id) : "" });
 
     return (
         <div className={`flex justify-between items-center rounded-lg  px-2.5 py-3 cursor-pointer  transition ${selectedChat?._id === data._id ? 'bg-slate-600/20' : 'hover:bg-slate-600/20'}`}
