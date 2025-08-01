@@ -12,8 +12,8 @@ import Message from "./Message";
 import NewMessage from "./NewMessage";
 import { useIsUserOnline } from "../hooks/useIsUserOnline";
 
-const ChatContainer = ({ showChatInfo, setShowChatInfo }:
-    { showChatInfo: boolean, setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
+const ChatContainer = ({ setShowChatInfo }:
+    { setShowChatInfo: Dispatch<SetStateAction<boolean>> }) => {
 
     const loginUser = useSelector(getLoggedInUser) as UserType | null
     const selectedChat = useSelector(getSelectedChat) as UserType | null
