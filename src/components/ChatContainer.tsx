@@ -39,7 +39,7 @@ const ChatContainer = ({ setShowChatInfo }:
         initialLoadRef.current = true;
     }, [selectedChat])
 
-    const isOnline = useIsUserOnline({ userId: selectedChat?._id ? String(selectedChat._id) : "" });
+    const isOnline = useIsUserOnline({ userId: selectedChat?._id });
 
     return (
         <div className={`relative flex flex-col justify-between  max-h-full overflow-hidden px-5 `}>

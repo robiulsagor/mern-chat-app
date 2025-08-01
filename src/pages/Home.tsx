@@ -96,7 +96,7 @@ const Home = () => {
                 {/* middle portion  */}
 
                 {selectedChat ?
-                    <ChatContainer showChatInfo={showChatInfo} setShowChatInfo={setShowChatInfo} /> :
+                    <ChatContainer setShowChatInfo={setShowChatInfo} /> :
                     <NoChatSelected />
                 }
 
