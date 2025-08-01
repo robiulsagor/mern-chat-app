@@ -36,7 +36,7 @@ const ChatUser = ({ data }: { data: UserType }) => {
                 </div>
             </div>
 
-            {data.unseenMessages > 0 && (
+            {data?.unseenMessages > 0 && (
                 <span className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-700 text-sm">{data?.unseenMessages} </span>
 
             )}

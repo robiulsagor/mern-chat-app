@@ -27,6 +27,7 @@ export interface UserType {
     email: string;
     bio: string;
     profilePicture: string;
+    unseenMessages: number;
 }
 
 export interface MessageType {
