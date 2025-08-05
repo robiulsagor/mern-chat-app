@@ -20,7 +20,7 @@ const ChatList = ({ selectedChat }: { selectedChat: boolean }) => {
 
     const logout = async () => {
         try {
-            dispatch(removeOnlineUser(user?._id))
+            dispatch(removeOnlineUser(String(user?._id)))
             socket.disconnect()
 
             dispatch(logoutUser())
