@@ -3,6 +3,8 @@ import { getAuthenticated, getAuthLoading } from "../redux/userSlice"
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
+    console.log("ProtectedRoute rendered");
+
     const isLoading = useSelector(getAuthLoading)
     const isAuthenticated = useSelector(getAuthenticated)
     if (isLoading) return <h2>Loading...</h2>

@@ -15,6 +15,8 @@ import PublicRoute from "./components/PublicRoute";
 import axiosInstance from "./axiosInstance";
 
 const App = () => {
+  console.log("From app");
+
   const dispatch = useDispatch()
   const user = useSelector(getLoggedInUser)
 
